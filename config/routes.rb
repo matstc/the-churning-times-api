@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  match '*path', :controller => 'application', :action => 'options', via: [:options]
+
   scope format: true, defaults: {format:'json'}, constraints: {format:'json'} do
     resources :articles
   end
