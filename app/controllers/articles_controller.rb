@@ -26,6 +26,11 @@ class ArticlesController < ApplicationController
   def create
     @article = Article.new(article_params)
 
+    generator = Faker::TabulaIpsum.new
+    generator.wordlist = ['percent', 'statistics', 'Monday', 'day', 'surprise', 'surreptitious', 'article', 'quote', 'says', 'reneges', 'reply', 'admission', 'end']
+    generator.wordlist.concat article_params[:headline].split(' ')
+    @article.text = "<p>" + (0...6).map {generator.paragraph + ' ' + generator.paragraph}.join("</p><p>") + "</p>"
+
     respond_to do |format|
       if @article.save
         format.json { render :show, status: :created, location: article_url(@article, format: 'json') }
