@@ -4,7 +4,13 @@ class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
   def index
-    @articles = Article.limit(6).all
+    @articles = Article.order('random()').limit(6).all
+  end
+
+  def recent
+    @articles = Article.order('articles.created_at desc').limit(6).all
+
+    render :index
   end
 
   # GET /articles/1
@@ -29,7 +35,8 @@ class ArticlesController < ApplicationController
     generator = Faker::TabulaIpsum.new
     generator.wordlist = ['percent', 'statistics', 'Monday', 'day', 'surprise', 'surreptitious', 'article', 'quote', 'says', 'reneges', 'reply', 'admission', 'end']
     generator.wordlist.concat article_params[:headline].split(' ')
-    @article.text = "<p>" + (0...6).map {generator.paragraph + ' ' + generator.paragraph}.join("</p><p>") + "</p>"
+    generator.wordlist.concat article_params[:lead].split(' ')
+    @article.text = "<p>" + (0...4).map {generator.paragraph + ' ' + generator.paragraph}.join("</p><p>") + "</p>"
 
     respond_to do |format|
       if @article.save
@@ -72,6 +79,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:headline, :text)
+      params.require(:article).permit(:headline, :text, :author, :lead)
     end
 end

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   match '*path', :controller => 'application', :action => 'options', via: [:options]
 
   scope format: true, defaults: {format:'json'}, constraints: {format:'json'} do
+    get 'articles/recent' => 'articles#recent'
     resources :articles
   end
 
