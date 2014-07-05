@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20140705122548) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "articles", force: true do |t|
     t.string   "headline"
     t.text     "text"
@@ -23,7 +26,7 @@ ActiveRecord::Schema.define(version: 20140705122548) do
     t.integer  "picture_id"
   end
 
-  add_index "articles", ["picture_id"], name: "index_articles_on_picture_id"
+  add_index "articles", ["picture_id"], name: "index_articles_on_picture_id", using: :btree
 
   create_table "pictures", force: true do |t|
     t.string "path"
