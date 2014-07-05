@@ -37,6 +37,7 @@ class ArticlesController < ApplicationController
     generator.wordlist.concat article_params[:headline].split(' ')
     generator.wordlist.concat article_params[:lead].split(' ')
     @article.text = "<p>" + (0...4).map {generator.paragraph + ' ' + generator.paragraph}.join("</p><p>") + "</p>"
+    @article.picture = Picture.order('random()').first
 
     respond_to do |format|
       if @article.save
